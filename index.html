@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Happy Birthday Khushi! ✨📖🎂</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient & Confetti Canvases -->
+  <canvas id="ambientCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="book-status-badge" id="bookStatusBadge">
+      <span class="badge-dot"></span>
+      <span class="badge-text" id="statusText">Closed Card • Tap to Open</span>
+    </div>
+    <div class="audio-controls">
+      <button id="soundToggleBtn" class="pill-btn" aria-label="Toggle Sound">
+        <span class="icon">🔊</span> <span class="label">Sound</span>
+      </button>
+      <button id="bgMusicToggleBtn" class="pill-btn" aria-label="Play Birthday Melody">
+        <span class="icon">🎵</span> <span class="label">Music</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Viewport Center Area -->
+  <main class="book-viewport">
+    
+    <!-- 3D Realistic Physical Book Container -->
+    <div class="book-scene" id="bookScene">
+      <div class="book-container closed" id="bookContainer">
+        
+        <!-- ================= INSIDE LEFT PAGE ================= -->
+        <!-- Contains the Envelope & Personalized Letter -->
+        <div class="book-page left-page" id="leftPage">
+          <div class="page-paper left-paper">
+            <div class="spine-shadow right-shadow"></div>
+            
+            <div class="page-content-wrapper">
+              <div class="page-header">
+                <span class="page-num">Page 1</span>
+                <h3 class="page-heading">A Birthday Letter 💌</h3>
+              </div>
+
+              <!-- Envelope & Letter Display -->
+              <div class="envelope-zone" id="envelopeZone">
+                <!-- Envelope Cover State -->
+                <div class="envelope-view" id="envelopeView">
+                  <div class="img-frame">
+                    <img src="./Screenshot%202026-09-11%20184154.png" alt="Envelope" class="page-asset-img" draggable="false">
+                    <div class="heart-seal-btn" id="sealBtn" title="Click to Read Letter">
+                      <span class="seal-heart">💖</span>
+                      <span class="seal-prompt">OPEN</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Unfolded Letter State -->
+                <div class="letter-view hidden" id="letterView">
+                  <div class="img-frame pin-frame">
+                    <span class="paper-pin">📌</span>
+                    <img src="./Screenshot%202026-09-11%20184220.png" alt="Personal Birthday Letter" class="page-asset-img" draggable="false">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Left Page Action Bar -->
+              <div class="page-actions">
+                <button class="mini-btn" id="toggleLetterBtn" type="button">
+                  <span id="toggleLetterLabel">✉️ Read Letter</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= CENTER SPINE ================= -->
+        <div class="book-spine" id="bookSpine">
+          <div class="spine-ridge"></div>
+        </div>
+
+        <!-- ================= INSIDE RIGHT PAGE ================= -->
+        <!-- Contains the Cake, Candles, and Interactive Blow Controls -->
+        <div class="book-page right-page" id="rightPage">
+          <div class="page-paper right-paper">
+            <div class="spine-shadow left-shadow"></div>
+            
+            <div class="page-content-wrapper">
+              <div class="page-header">
+                <h3 class="page-heading">Make a Wish! 🎂</h3>
+                <span class="page-num">Page 2</span>
+              </div>
+
+              <!-- Cake & Candle Interactive Stage -->
+              <div class="cake-interactive-box">
+                <div class="img-frame cake-frame">
+                  <img src="./Screenshot%202026-09-11%20184206.png" alt="Birthday Cake" class="page-asset-img" id="cakeImage" draggable="false">
+                  
+                  <!-- Candle Hotspots (Aligned with wicks in screenshot) -->
+                  <div class="candle-hotspot candle-1" data-candle="1" id="candle-1" title="Tap flame to blow">
+                    <div class="flame" id="flame-1"></div>
+                    <div class="smoke" id="smoke-1"></div>
+                  </div>
+                  <div class="candle-hotspot candle-2" data-candle="2" id="candle-2" title="Tap flame to blow">
+                    <div class="flame" id="flame-2"></div>
+                    <div class="smoke" id="smoke-2"></div>
+                  </div>
+                  <div class="candle-hotspot candle-3" data-candle="3" id="candle-3" title="Tap flame to blow">
+                    <div class="flame" id="flame-3"></div>
+                    <div class="smoke" id="smoke-3"></div>
+                  </div>
+
+                  <!-- Wind Stream Overlay -->
+                  <div class="wind-overlay" id="windOverlay">
+                    <div class="gust g1"></div>
+                    <div class="gust g2"></div>
+                    <div class="gust g3"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Candle Blowing Interaction Controls -->
+              <div class="cake-controls">
+                <div class="hold-blow-wrapper">
+                  <button class="blow-hold-btn" id="blowHoldBtn" type="button" aria-label="Hold to Blow">
+                    <svg class="progress-ring" viewBox="0 0 100 100">
+                      <circle class="ring-bg" stroke="#fecdd3" stroke-width="6" fill="transparent" r="44" cx="50" cy="50"/>
+                      <circle class="ring-bar" id="blowProgressBar" stroke="#b91c1c" stroke-width="6" stroke-dasharray="276.4" stroke-dashoffset="276.4" stroke-linecap="round" fill="transparent" r="44" cx="50" cy="50"/>
+                    </svg>
+                    <div class="blow-btn-face">
+                      <span class="blow-icon">💨</span>
+                      <span class="blow-label" id="blowBtnLabel">HOLD TO BLOW</span>
+                    </div>
+                  </button>
+                </div>
+
+                <div class="right-page-actions">
+                  <button class="mini-btn subtle" id="relightBtn" type="button">🕯️ Relight</button>
+                  <button class="mini-btn subtle" id="micToggleBtn" type="button">🎙️ Mic</button>
+                </div>
+                <div class="mic-status" id="micStatus"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 3D ROTATING FRONT COVER FLAP ================= -->
+        <!-- Hinged on the Left (at the Center Spine) and opens -180deg to reveal inside -->
+        <div class="book-cover-flap" id="bookCoverFlap">
+          
+          <!-- Front Face: The Scrapbook Cover of Khushi -->
+          <div class="flap-face flap-front">
+            <div class="tape-strip top-tape"></div>
+            
+            <div class="cover-image-box">
+              <img src="./Screenshot%202026-09-11%20183400.png" alt="Khushi Birthday Cover" class="cover-asset-img" draggable="false">
+              
+              <!-- Floating stickers -->
+              <div class="sticker hat-sparkle">✨</div>
+              <div class="sticker kiss">💋</div>
+              <div class="sticker bow">🎀</div>
+              <div class="sticker star">⭐</div>
+            </div>
+
+            <div class="cover-bottom-bar">
+              <div class="cover-badge">✨ Tap to Open Birthday Card ✨</div>
+            </div>
+            
+            <div class="tape-strip bottom-tape"></div>
+          </div>
+
+          <!-- Back Face: Becomes the Left Inner Facing Page under rotation -->
+          <div class="flap-face flap-back">
+            <div class="flap-back-pattern">
+              <div class="flap-back-content">
+                <span class="flower-icon">🌸</span>
+                <h4>Happy Birthday Khushi!</h4>
+                <p>Opening your special memories...</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Persistent Bottom Controls -->
+    <nav class="bottom-controls-bar">
+      <button class="action-btn open-card-btn" id="openCardBtn" type="button">
+        <span class="btn-icon">📖</span>
+        <span class="btn-text" id="openBtnText">Open Book</span>
+      </button>
+      <button class="action-btn close-card-btn hidden" id="closeCardBtn" type="button">
+        <span class="btn-icon">📕</span>
+        <span class="btn-text">Back to Cover</span>
+      </button>
+    </nav>
+
+  </main>
+
+  <!-- Quick Letter Zoom Modal for Easy Mobile Reading -->
+  <div class="letter-zoom-modal" id="letterZoomModal">
+    <div class="modal-backdrop" id="letterModalBackdrop"></div>
+    <div class="letter-modal-dialog pop-in">
+      <button class="modal-close-x" id="letterCloseXBtn" type="button" aria-label="Close Letter">✕</button>
+      <div class="letter-modal-pin">📌</div>
+      <img src="./Screenshot%202026-09-11%20184220.png" alt="Personal Birthday Letter Full View" class="letter-modal-img" draggable="false">
+      <button class="primary-btn" id="letterModalBackBtn" type="button">
+        <span>‹ Back to Book 📖</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Celebratory Finale Modal Overlay (Appears after blowing candles) -->
+  <div class="celebration-modal" id="celebrationModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-dialog pop-in">
+      <div class="modal-badge">🎉 WISH GRANTED! 🎂</div>
+      <h2 class="modal-title">Happy Birthday Khushi! ❤️</h2>
+      
+      <div class="modal-polaroid">
+        <img src="./Screenshot%202026-09-11%20183400.png" alt="Khushi" class="modal-img">
+        <p class="polaroid-text">Keep shining always! ✨</p>
+      </div>
+
+      <p class="modal-quote">
+        "May your year ahead bring you endless happiness, true peace, freedom, and all the love you deserve!" 🌸✨
+      </p>
+
+      <div class="modal-btn-row">
+        <button class="primary-btn" id="modalCloseBtn" type="button">
+          <span>🎂 Back to Book</span>
+        </button>
+        <button class="secondary-btn" id="modalRelightBtn" type="button">
+          <span>🕯️ Blow Candles Again</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
